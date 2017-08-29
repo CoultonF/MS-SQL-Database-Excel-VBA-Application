@@ -3,7 +3,7 @@
 Setup
 
 Step 1:
-  Using MS SQL Server Management Studio as admin, create a local database and install the SQL script into the database.
+  Using MS SQL Server Management Studio as admin, create a local database and execute the provided SQL script on the database.
   
 Step 2:
   Populate the test data provided.
