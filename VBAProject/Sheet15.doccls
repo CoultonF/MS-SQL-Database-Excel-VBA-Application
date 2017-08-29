@@ -1,0 +1,11 @@
+Private Sub Worksheet_Change(ByVal Target As Range)
+Application.EnableEvents = False
+If Target.Locked = True Then
+    On Error GoTo cantundo
+    Application.Undo
+    MsgBox "You must use the toolbar actions to enter data in this cell", vbMsgBoxSetForeground, "Spec Database"
+cantundo:
+Err.Clear
+End If
+Application.EnableEvents = True
+End Sub

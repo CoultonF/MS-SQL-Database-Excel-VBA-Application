@@ -1,0 +1,141 @@
+'TO DO LIST
+'---------------------
+
+'HOW TO SAVE
+'---------------------
+'Go into "Design Mode" by pressing the pencil/ruler icon in the developer toolbar and save (ctrl + s)
+'This will prevent macros from being triggered from the Workbook.Save
+
+
+
+'===================================================================================||
+'                                                                                   ||
+'                                                                                   ||
+'                           GENERAL CODE STRUCTURE                                  ||
+'                                                                                   ||
+'                                                                                   ||
+'       All the macros fired from Menu, start from the Module.MacroStartPoints      ||
+'       This is a good place to start debugging from                                ||
+'       Press Ctrl + G to show Debug Statements (SQL Queries, DB State, Errors)     ||
+'                                                                                   ||
+'       Class.DataAccess runs all database queries                                  ||
+'                                                                                   ||
+'       Workbook open/close/save are in Sheet 15(SPEC SHEET)                        ||
+'       If Sheet15 is accidently deleted you can find the code in comments at end   ||
+'                                                                                   ||
+'       Sheet1 (STATUS BOOLEANS) determines/saves the checkbox values:              ||
+'       Completed, Cerner Fix, Assigned, Unassigned, Canceled, Hold                 ||
+'       More details see Module.StatusBooleans                                      ||
+'                                                                                   ||
+'       The UI Ribbon can be changed using an editor application                    ||
+'       The easiest one to use can be downloaded here:                              ||
+'       https://msdn.microsoft.com/en-us/library/office/ee691832(v=office.14).aspx  ||
+'                                                                                   ||
+'                                                                                   ||
+'                                                                                   ||
+'===================================================================================||
+
+Private Sub Workbook_NewSheet(ByVal Sh As Object)
+     
+    With Application
+        .ScreenUpdating = False
+        .DisplayAlerts = False
+          
+        ActiveSheet.Delete
+         
+        MsgBox "Cannot add new sheets.", 16
+         
+        .DisplayAlerts = True
+        .ScreenUpdating = True
+    End With
+     
+End Sub
+
+Private Sub Workbook_Open()
+
+'This message box allows the ribbon to load without errors.
+minimizeAllWorkbooks
+'WaitForUIRibbonLoad 1, "Loading User Interface, this will only take a few seconds.", "Loading..."
+
+Application.CommandBars("Worksheet Menu Bar").Controls("File").Controls("Save As...").Enabled = False
+Application.CommandBars("Worksheet Menu Bar").Controls("File").Controls("Save").Enabled = False
+
+Dim f As New SysFunc
+Dim listtype As Boolean
+
+If Not Application.ActiveWorkbook.Path Like "*" & f.getUsername & "*" Then
+    MsgBox "SpecDatabase.xlsm must be opened from the network file or a shortcut. The application will now close. Error raised from Thisworkbook.Workbook_Open.", vbExclamation
+    Application.ActiveWorkbook.Close
+End If
+Application.DisplayAlerts = False
+ActiveWindow.freezePanes = False
+
+'ACTIVATE ALL USER PREFERENCES
+listtype = MUserPreferences.activate
+
+'BUILD THE SPEC LIST
+Build listtype
+
+'PRINT SPEC LIST TO SCREEN
+Call SpecListController.printList
+
+End Sub
+Sub WaitForUIRibbonLoad(PauseTime As Integer, Message As String, Title As String)
+
+Dim WScriptShell As Object
+Dim ConfigString As String
+
+Set WScriptShell = CreateObject("WScript.Shell")
+ConfigString = "mshta.exe vbscript:close(CreateObject(""WScript.Shell"")." & _
+               "Popup(""" & Message & """," & PauseTime & ",""" & Title & """))"
+
+WScriptShell.Run ConfigString
+
+End Sub
+Private Sub minimizeAllWorkbooks()
+
+Application.ScreenUpdating = False
+Dim WB As Workbook
+For Each WB In Workbooks
+If WB.Name <> ThisWorkbook.Name Then
+WB.activate
+ActiveWindow.WindowState = xlMinimized
+End If
+Next WB
+ThisWorkbook.activate
+ActiveWindow.WindowState = xlMaximized
+Application.ScreenUpdating = True
+
+End Sub
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+
+    Me.Saved = True
+
+End Sub
+
+Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+
+    MsgBox "Saving is not required in this workbook."
+    Cancel = True
+
+End Sub
+
+
+'#  This code needs to be in 'SPEC SHEET' Worksheet. If it is somehow deleted you can remake the sheet with the proper name and paste in the code below.
+'Private Sub Worksheet_Change(ByVal Target As Range)
+'Application.EnableEvents = False
+'If Target.Locked = True Then
+'    On Error GoTo cantundo
+'    Application.Undo
+'    MsgBox "You must use the toolbar actions to enter data in this cell", vbMsgBoxSetForeground, "Spec Database"
+'cantundo:
+'Err.Clear
+'End If
+'Application.EnableEvents = True
+'End Sub
+
+
+
+
+
+
