@@ -1,7 +1,10 @@
 # MS-SQL-Database-Excel-VBA-Application
 
+### Database Design
 
+![Add New](https://raw.githubusercontent.com/CoultonF/MS-SQL-Database-Excel-VBA-Application/master/.Images/database.png)
 
+[Discipline], [Analyst], 
 
 ### Functionality
 
