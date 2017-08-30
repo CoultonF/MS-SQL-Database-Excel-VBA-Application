@@ -4,7 +4,7 @@
 
 ![Add New](https://raw.githubusercontent.com/CoultonF/MS-SQL-Database-Excel-VBA-Application/master/.Images/database.png)
 
-*[Discipline], and [Analyst] tables are used as global variable values within the application therefore not connected to other tables.
+*[Discipline], and [Analyst] tables are used as global variable values within the application therefore not connected to other tables.*
 
 ### Functionality
 
