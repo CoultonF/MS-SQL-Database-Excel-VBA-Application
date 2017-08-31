@@ -29,9 +29,6 @@
 #### List All action description onHover:
 ![Add New](https://raw.githubusercontent.com/CoultonF/MS-SQL-Database-Excel-VBA-Application/master/.Images/listall.png)
 
-#### List All action description onHover:
-![Add New](https://raw.githubusercontent.com/CoultonF/MS-SQL-Database-Excel-VBA-Application/master/.Images/listall.png)
-
 #### View [Update] rows linked to selected [Spec] row:
 ![Add New](https://raw.githubusercontent.com/CoultonF/MS-SQL-Database-Excel-VBA-Application/master/.Images/viewupdateshover.png)
 
